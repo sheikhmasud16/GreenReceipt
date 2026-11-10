@@ -1,0 +1,231 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User business profile and configuration",
+      "type": "object",
+      "properties": {
+        "businessName": { "type": "string", "maxLength": 100 },
+        "mobile": { "type": "string", "maxLength": 20 },
+        "email": { "type": "string", "maxLength": 100 },
+        "address": { "type": "string", "maxLength": 250 },
+        "logoUrl": { "type": "string", "maxLength": 2048 },
+        "description": { "type": "string", "maxLength": 500 },
+        "currency": { "type": "string", "maxLength": 10 },
+        "receiptFooter": { "type": "string", "maxLength": 500 },
+        "receiptPrefix": { "type": "string", "maxLength": 20 },
+        "receiptPaperSize": { "type": "string", "enum": ["a4", "a5", "thermal80", "thermal58"] },
+        "receiptStyle": { "type": "string", "enum": ["green", "minimal", "professional"] },
+        "preferredLanguage": { "type": "string", "enum": ["bn", "en"] },
+        "allowNegativeStock": { "type": "boolean" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["businessName", "mobile", "email"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Inventory product item",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 150 },
+        "sku": { "type": "string", "maxLength": 50 },
+        "barcode": { "type": "string", "maxLength": 50 },
+        "category": { "type": "string", "maxLength": 50 },
+        "description": { "type": "string", "maxLength": 500 },
+        "purchasePrice": { "type": "number" },
+        "sellingPrice": { "type": "number" },
+        "currentStock": { "type": "number" },
+        "openingStock": { "type": "number" },
+        "minimumStock": { "type": "number" },
+        "unit": { "type": "string", "maxLength": 30 },
+        "imageUrl": { "type": "string", "maxLength": 2048 },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["name", "purchasePrice", "sellingPrice", "currentStock", "unit"]
+    },
+    "Receipt": {
+      "title": "Receipt",
+      "description": "Sales invoice receipt document",
+      "type": "object",
+      "properties": {
+        "receiptNumber": { "type": "string", "maxLength": 50 },
+        "date": { "type": "string", "maxLength": 30 },
+        "time": { "type": "string", "maxLength": 30 },
+        "customerId": { "type": "string", "maxLength": 100 },
+        "customerName": { "type": "string", "maxLength": 100 },
+        "customerMobile": { "type": "string", "maxLength": 25 },
+        "customerAddress": { "type": "string", "maxLength": 200 },
+        "items": { "type": "array" },
+        "subtotal": { "type": "number" },
+        "itemDiscount": { "type": "number" },
+        "overallDiscount": { "type": "number" },
+        "additionalCharges": { "type": "number" },
+        "grandTotal": { "type": "number" },
+        "paidAmount": { "type": "number" },
+        "dueAmount": { "type": "number" },
+        "paymentMethod": { "type": "string", "maxLength": 30 },
+        "paymentStatus": { "type": "string", "enum": ["paid", "partial", "unpaid"] },
+        "status": { "type": "string", "enum": ["completed", "cancelled", "returned"] },
+        "notes": { "type": "string", "maxLength": 500 },
+        "language": { "type": "string", "enum": ["bn", "en"] },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["receiptNumber", "items", "grandTotal", "paidAmount", "dueAmount", "paymentStatus", "status"]
+    },
+    "Purchase": {
+      "title": "Purchase",
+      "description": "Supplier inventory purchase record",
+      "type": "object",
+      "properties": {
+        "invoiceNumber": { "type": "string", "maxLength": 50 },
+        "supplierId": { "type": "string", "maxLength": 100 },
+        "supplierName": { "type": "string", "maxLength": 100 },
+        "supplierMobile": { "type": "string", "maxLength": 25 },
+        "purchaseDate": { "type": "string", "maxLength": 30 },
+        "items": { "type": "array" },
+        "additionalCost": { "type": "number" },
+        "discount": { "type": "number" },
+        "totalAmount": { "type": "number" },
+        "paidAmount": { "type": "number" },
+        "dueAmount": { "type": "number" },
+        "paymentMethod": { "type": "string", "maxLength": 30 },
+        "notes": { "type": "string", "maxLength": 500 },
+        "status": { "type": "string", "enum": ["completed", "cancelled"] },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["invoiceNumber", "items", "totalAmount", "paidAmount", "dueAmount", "status"]
+    },
+    "Customer": {
+      "title": "Customer",
+      "description": "Customer profile and balance record",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 100 },
+        "mobile": { "type": "string", "maxLength": 25 },
+        "email": { "type": "string", "maxLength": 100 },
+        "address": { "type": "string", "maxLength": 250 },
+        "notes": { "type": "string", "maxLength": 500 },
+        "totalPurchases": { "type": "number" },
+        "totalPaid": { "type": "number" },
+        "totalDue": { "type": "number" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["name", "mobile"]
+    },
+    "Supplier": {
+      "title": "Supplier",
+      "description": "Supplier profile and balance record",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 100 },
+        "businessName": { "type": "string", "maxLength": 100 },
+        "mobile": { "type": "string", "maxLength": 25 },
+        "email": { "type": "string", "maxLength": 100 },
+        "address": { "type": "string", "maxLength": 250 },
+        "notes": { "type": "string", "maxLength": 500 },
+        "totalPurchased": { "type": "number" },
+        "totalPaid": { "type": "number" },
+        "totalDue": { "type": "number" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["name", "mobile"]
+    },
+    "Expense": {
+      "title": "Expense",
+      "description": "Operating expense item",
+      "type": "object",
+      "properties": {
+        "category": { "type": "string", "maxLength": 50 },
+        "title": { "type": "string", "maxLength": 150 },
+        "amount": { "type": "number" },
+        "date": { "type": "string", "maxLength": 30 },
+        "paymentMethod": { "type": "string", "maxLength": 30 },
+        "description": { "type": "string", "maxLength": 500 },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["category", "title", "amount", "date"]
+    },
+    "InventoryTransaction": {
+      "title": "InventoryTransaction",
+      "description": "Stock movement audit history",
+      "type": "object",
+      "properties": {
+        "productId": { "type": "string", "maxLength": 100 },
+        "productName": { "type": "string", "maxLength": 150 },
+        "transactionType": { "type": "string", "enum": ["opening", "purchase", "sale", "return", "damage", "adjustment"] },
+        "quantity": { "type": "number" },
+        "previousStock": { "type": "number" },
+        "newStock": { "type": "number" },
+        "referenceId": { "type": "string", "maxLength": 100 },
+        "referenceType": { "type": "string", "maxLength": 50 },
+        "notes": { "type": "string", "maxLength": 500 },
+        "date": { "type": "string", "maxLength": 30 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["productId", "productName", "transactionType", "quantity", "previousStock", "newStock"]
+    },
+    "Payment": {
+      "title": "Payment",
+      "description": "Due payment receipt or settlement",
+      "type": "object",
+      "properties": {
+        "partyType": { "type": "string", "enum": ["customer", "supplier"] },
+        "partyId": { "type": "string", "maxLength": 100 },
+        "partyName": { "type": "string", "maxLength": 100 },
+        "receiptId": { "type": "string", "maxLength": 100 },
+        "purchaseId": { "type": "string", "maxLength": 100 },
+        "amount": { "type": "number" },
+        "paymentMethod": { "type": "string", "maxLength": 30 },
+        "date": { "type": "string", "maxLength": 30 },
+        "notes": { "type": "string", "maxLength": 500 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["partyType", "partyId", "partyName", "amount", "paymentMethod", "date"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Root document for a user business profile"
+    },
+    "/users/{userId}/products/{productId}": {
+      "schema": "Product",
+      "description": "User's product inventory catalog"
+    },
+    "/users/{userId}/receipts/{receiptId}": {
+      "schema": "Receipt",
+      "description": "User's sales invoices and receipts"
+    },
+    "/users/{userId}/purchases/{purchaseId}": {
+      "schema": "Purchase",
+      "description": "User's stock purchases from suppliers"
+    },
+    "/users/{userId}/customers/{customerId}": {
+      "schema": "Customer",
+      "description": "User's customer database and ledger"
+    },
+    "/users/{userId}/suppliers/{supplierId}": {
+      "schema": "Supplier",
+      "description": "User's supplier database and ledger"
+    },
+    "/users/{userId}/expenses/{expenseId}": {
+      "schema": "Expense",
+      "description": "User's operating business expenses"
+    },
+    "/users/{userId}/inventoryTransactions/{transactionId}": {
+      "schema": "InventoryTransaction",
+      "description": "User's stock adjustment and movement audit trail"
+    },
+    "/users/{userId}/payments/{paymentId}": {
+      "schema": "Payment",
+      "description": "Due payments and settlements for customers/suppliers"
+    }
+  }
+}

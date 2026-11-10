@@ -1,0 +1,62 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Safety Net: Default deny all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128;
+    }
+
+    // User Business Root
+    match /users/{userId} {
+      allow get, create, update, delete: if isOwner(userId) && isValidId(userId);
+
+      match /products/{productId} {
+        allow read, write: if isOwner(userId) && isValidId(productId);
+      }
+
+      match /receipts/{receiptId} {
+        allow read, write: if isOwner(userId) && isValidId(receiptId);
+      }
+
+      match /purchases/{purchaseId} {
+        allow read, write: if isOwner(userId) && isValidId(purchaseId);
+      }
+
+      match /customers/{customerId} {
+        allow read, write: if isOwner(userId) && isValidId(customerId);
+      }
+
+      match /suppliers/{supplierId} {
+        allow read, write: if isOwner(userId) && isValidId(supplierId);
+      }
+
+      match /expenses/{expenseId} {
+        allow read, write: if isOwner(userId) && isValidId(expenseId);
+      }
+
+      match /inventoryTransactions/{transactionId} {
+        allow read, write: if isOwner(userId) && isValidId(transactionId);
+      }
+
+      match /payments/{paymentId} {
+        allow read, write: if isOwner(userId) && isValidId(paymentId);
+      }
+
+      match /auditLogs/{logId} {
+        allow read, write: if isOwner(userId) && isValidId(logId);
+      }
+    }
+  }
+}

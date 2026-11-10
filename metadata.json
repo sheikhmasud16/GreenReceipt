@@ -1,0 +1,6 @@
+{
+  "name": "Smart Business Manager",
+  "description": "Real-time, multi-user Business Management and Sales Receipt Generator Web Application with inventory tracking, expenses, profits, and WhatsApp sharing.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
