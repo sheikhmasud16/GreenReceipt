@@ -17,6 +17,7 @@ import { ExpensesView } from './components/expenses/ExpensesView';
 import { SalesReportsView } from './components/reports/SalesReportsView';
 import { ProfitLossReportsView } from './components/reports/ProfitLossReportsView';
 import { BusinessProfileView } from './components/profile/BusinessProfileView';
+import { EmailVerificationView } from './components/auth/EmailVerificationView';
 import { Receipt } from './types';
 
 const MainAppContent: React.FC = () => {
@@ -40,6 +41,12 @@ const MainAppContent: React.FC = () => {
 
   if (!currentUser) {
     return <AuthView />;
+  }
+
+  // Enforce email verification for email & password registered users
+  const isEmailPasswordUser = currentUser.providerData.some((p) => p.providerId === 'password');
+  if (isEmailPasswordUser && !currentUser.emailVerified) {
+    return <EmailVerificationView />;
   }
 
   const handleDuplicate = (receipt: Receipt) => {

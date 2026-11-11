@@ -88,17 +88,35 @@ export const AuthView: React.FC = () => {
       if (err.code === 'auth/email-already-in-use') {
         setError(
           language === 'bn'
-            ? 'এই ইমেইলটি ইতিপূর্বে ব্যবহার করা হয়েছে।'
-            : 'Email already in use.'
+            ? 'এই ইমেইলটি ইতিপূর্বে ব্যবহার করা হয়েছে। আপনি সরাসরি লগইন করতে পারেন অথবা অন্য ইমেইল ব্যবহার করুন।'
+            : 'Email already in use. Please sign in or use another email.'
         );
       } else if (err.code === 'auth/operation-not-allowed') {
         setError(
           language === 'bn'
-            ? 'ইমেইল/পাসওয়ার্ড অনুমোদন ফায়ারবেস কনসোলে চালু থাকতে হবে অথবা নিচে গুগল দিয়ে লগইন করুন।'
-            : 'Email auth not yet toggled on in console; you can use Google Sign-In below!'
+            ? 'ফায়ারবেস কনসোলে Email/Password মেথড চালু নেই।\n• Firebase Console -> Authentication -> Sign-in method এ গিয়ে Email/Password সক্রিয় করুন।\n• অথবা তাৎক্ষণিকভাবে নিচে থাকা "গুগল দিয়ে প্রবেশ করুন" বাটন চাপুন।'
+            : 'Email/Password sign-in is disabled in Firebase Console.\n• Go to Firebase Console -> Authentication -> Sign-in method and enable Email/Password.\n• Or immediately sign in using Google below.'
+        );
+      } else if (err.code === 'auth/invalid-email') {
+        setError(
+          language === 'bn'
+            ? 'সঠিক ইমেইল এড্রেস লিখুন (যেমন: name@business.com)'
+            : 'Please enter a valid email address.'
+        );
+      } else if (err.code === 'auth/weak-password') {
+        setError(
+          language === 'bn'
+            ? 'পাসওয়ার্ডটি দুর্বল। অনুগ্রহ করে কমপক্ষে ৮ অক্ষরের শক্তিশালী পাসওয়ার্ড দিন।'
+            : 'Password is too weak. Please use at least 8 characters.'
+        );
+      } else if (err.code === 'auth/network-request-failed') {
+        setError(
+          language === 'bn'
+            ? 'ইন্টারনেট সংযোগ বিচ্ছিন্ন অথবা ধীরগতির। আবার চেষ্টা করুন।'
+            : 'Network error. Please check your internet connection.'
         );
       } else {
-        setError(err.message || 'Registration failed');
+        setError(err.message || (language === 'bn' ? 'রেজিস্ট্রেশন ব্যর্থ হয়েছে।' : 'Registration failed.'));
       }
     } finally {
       setIsSubmitting(false);
@@ -113,11 +131,15 @@ export const AuthView: React.FC = () => {
       await loginUser(email, password);
     } catch (err: any) {
       console.error(err);
-      if (err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password') {
+      if (
+        err.code === 'auth/invalid-credential' ||
+        err.code === 'auth/wrong-password' ||
+        err.code === 'auth/user-not-found'
+      ) {
         setError(
           language === 'bn'
-            ? 'ইমেইল বা পাসওয়ার্ড সঠিক নয়।'
-            : 'Invalid email or password.'
+            ? 'ইমেইল বা পাসওয়ার্ড সঠিক নয়। দয়া করে পুনরায় চেক করুন।'
+            : 'Invalid email or password. Please verify and try again.'
         );
       } else if (err.code === 'auth/operation-not-allowed') {
         setError(
@@ -125,8 +147,14 @@ export const AuthView: React.FC = () => {
             ? 'ইমেইল লগইন এখনো সক্রিয় করা হয়নি। অনুগ্রহ করে নিচের গুগল বোতাম ব্যবহার করুন।'
             : 'Email login disabled; please sign in with Google below.'
         );
+      } else if (err.code === 'auth/too-many-requests') {
+        setError(
+          language === 'bn'
+            ? 'অতিরিক্ত ভুল চেষ্টার কারণে একাউন্টটি সাময়িকভাবে লক রয়েছে। কিছুক্ষণ পর চেষ্টা করুন।'
+            : 'Too many attempts. Account is temporarily locked. Try again later.'
+        );
       } else {
-        setError(err.message || 'Login failed');
+        setError(err.message || (language === 'bn' ? 'লগইন ব্যর্থ হয়েছে।' : 'Login failed.'));
       }
     } finally {
       setIsSubmitting(false);
@@ -229,9 +257,9 @@ export const AuthView: React.FC = () => {
 
         {/* Feedback message */}
         {error && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-800 rounded-xl text-xs flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
-            <span>{error}</span>
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-800 rounded-xl text-xs flex items-start gap-2.5">
+            <AlertCircle className="w-4 h-4 shrink-0 text-red-600 mt-0.5" />
+            <span className="whitespace-pre-line leading-relaxed">{error}</span>
           </div>
         )}
 
